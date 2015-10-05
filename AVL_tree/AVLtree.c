@@ -53,7 +53,7 @@ static void subjectHeight(Postion P , AVLTree T)
 {
 	if (P != NULL)
 	{
-		P->height = higherOnesValue(P->leftChid , P->rightChild) ; 
+		P->height = higherOnesValue(P->leftChild , P->rightChild) ; 
 	}
 }
 */
@@ -65,8 +65,8 @@ static Position LL_singleRotation(Position P , AVLTree T) 	//case 1
 		PsChild = P->leftChild ; 
 		P->leftChild = PsChild->rightChild ; 
 		PsChild->rightChild = P ;
-		P->height = higherOnesValue(P->leftChid , P->rightChild) + 1 ;
-		PsChild->height = higherOnesValue(PsChild->leftChid , PsChild->rightChild) + 1 ;
+		P->height = higherOnesValue(P->leftChild , P->rightChild) + 1 ;
+		PsChild->height = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1 ;
 	}
 	else
 		PsChild = NULL;
@@ -81,35 +81,43 @@ static Position RR_singleRotation(Position P , AVLTree T)	//case 4
 		PsChild = P->rightChild ;
 		P->rightChild = PsChild ->leftChild ; 
 		PsChild->leftChild = P ; 
-		P->height = higherOnesValue(P->leftChid , P->rightChild)  + 1 ;
-		PsChild->height  = higherOnesValue(PsChild->leftChid , PsChild->rightChild) ;
+		P->height = higherOnesValue(P->leftChild , P->rightChild)  + 1 ;
+		PsChild->height  = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1；
 	}
 	else
 		PsChild = NULL;
 	return PsChild ; 
 }
-/*没写完
 static Position LR_doubleRotation(Position P , AVLTree T)	//case 2
 {
 	Position PsChild ; 
 	if(retrieveElement(P , T) != NOTEXIST)
 	{
-		P->leftChid = RR_sigleRotation(P->leftChild , T) ; 
+		P->leftChild = RR_sigleRotation(P->leftChild , T) ; 
 		P = LL_singleRotation(P , T) ;
-		P->leftChid->height = higherOnesValue(P-)
-		
+		P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
+		P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
+		P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
 	}
 	else 
 		PsChild = NULL;
 	return PsChild ;
 }
-*/
+
 static Position RL_doubleRotation(Position P , AVLTree T)	//case 4
 {
-	/*This function I will use another way to 
-	implement compared to LR_doubleRotation*/
-	Position PsChild , PsGrandchild ;
-	if()
+	Position PsChild ; 
+	if(retrieveElement(P , T) != NOTEXIST )
+	{
+		P->rightChild = LL_singleRotation(P->rightChild , T) ;
+		P = RR_sigleRotation(P , T) ;
+		P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
+		P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
+		P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
+	}
+	else
+		PsChild = NULL ;
+	return PsChild ;
 }
 
 
