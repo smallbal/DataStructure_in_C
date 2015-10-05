@@ -48,15 +48,15 @@ static int higherOnesValue(Position X , Position Y , const AVLTree T)
 	YsHeight = Height(Y , T);
 	return XsHeight>YsHeight ? XsHeight : YsHeight ;
 }
-/*没写完
+
 static void subjectHeight(Postion P , AVLTree T)
 {
 	if (P != NULL)
-	{
-		P->height = higherOnesValue(P->leftChild , P->rightChild) ; 
-	}
+		if((isEmpty(P->leftChild) != isEmpty(P->rightChild))||(isEmpty(P->leftChild) == 0))
+			P->height = higherOnesValue(P->leftChild , P->rightChild)+ 1 ;
+		else 
+			P->height = 0 ;
 }
-*/
 static Position LL_singleRotation(Position P , AVLTree T) 	//case 1
 {
 	Position PsChild;
@@ -65,8 +65,10 @@ static Position LL_singleRotation(Position P , AVLTree T) 	//case 1
 		PsChild = P->leftChild ; 
 		P->leftChild = PsChild->rightChild ; 
 		PsChild->rightChild = P ;
-		P->height = higherOnesValue(P->leftChild , P->rightChild) + 1 ;
-		PsChild->height = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1 ;
+		//P->height = higherOnesValue(P->leftChild , P->rightChild) + 1 ;
+		//PsChild->height = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1 ;
+		subjectHeight(P , T);
+		subjectHeight(PsChild , T);
 	}
 	else
 		PsChild = NULL;
@@ -81,8 +83,10 @@ static Position RR_singleRotation(Position P , AVLTree T)	//case 4
 		PsChild = P->rightChild ;
 		P->rightChild = PsChild ->leftChild ; 
 		PsChild->leftChild = P ; 
-		P->height = higherOnesValue(P->leftChild , P->rightChild)  + 1 ;
-		PsChild->height  = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1；
+		//P->height = higherOnesValue(P->leftChild , P->rightChild)  + 1 ;
+		//PsChild->height  = higherOnesValue(PsChild->leftChild , PsChild->rightChild) + 1；
+		subjectHeight(P , T) ;
+		subjectHeight(PsChild , T) ;
 	}
 	else
 		PsChild = NULL;
@@ -95,9 +99,12 @@ static Position LR_doubleRotation(Position P , AVLTree T)	//case 2
 	{
 		P->leftChild = RR_sigleRotation(P->leftChild , T) ; 
 		P = LL_singleRotation(P , T) ;
-		P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
-		P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
-		P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
+	//	P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
+	//	P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
+	//	P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
+		subjectHeight(P->leftChild , T) ;
+		subjectHeight(P->rightChild, T) ;
+		subjectHeight(P , T) ;
 	}
 	else 
 		PsChild = NULL;
@@ -111,9 +118,12 @@ static Position RL_doubleRotation(Position P , AVLTree T)	//case 4
 	{
 		P->rightChild = LL_singleRotation(P->rightChild , T) ;
 		P = RR_sigleRotation(P , T) ;
-		P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
-		P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
-		P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
+		//P->leftChild->height = higherOnesValue(P->leftChild->leftChild, P->leftChild->rightChild , T) + 1 ;
+		//P->rightChild->height = higherOnesValue(P->rightChild->leftChild , P->rightChild->rightChild , T) + 1 ; 
+		//P->height = higherOnesValue(P->leftChild , P->rightChild , T) + 1 ；
+		subjectHeight(P->leftChild , T) ;
+		subjectHeight(P->rightChild , T) ;
+		subjectHeight(T , T) ;
 	}
 	else
 		PsChild = NULL ;
@@ -210,9 +220,7 @@ Position findNode(const ElementType X, const AVLTree T)
   }
   return P;
 }
-/*还没写完，先注释了
+/* 晚上继续
 AVLTree deleteAVLNode(const ElementType X , AVLTree T)
 {
-  
-
 */
